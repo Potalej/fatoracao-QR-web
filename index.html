@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Título</title>
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/main.css">
+    <!-- PyScript -->
+    <!-- <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" /> -->
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+
+    <style>
+        body {
+            text-align: center;
+            font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+            font-size: 12px;
+            padding: 30px 80px;
+        }
+        input.elemento_ij {
+            width: 30px !important;
+        }
+        /* desabilita as rodinhas do input */
+        input.elemento_ij::-webkit-outer-spin-button,
+        input.elemento_ij::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .div_tabela {
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px !important;
+        }
+        .div_tabela > table {
+            padding: 5px;
+            text-align: center;
+            border: 1px solid black;
+            border-radius: 5px;
+            border-top: none;
+            border-bottom: none;
+        }
+        .div_tabela > table td {
+            padding: 10px;
+            height: 15px;
+            width: 15px;
+        }
+        input {
+            text-align: center;
+        }
+        .purple {
+            background-color: rgb(172, 44, 172);
+            color: white;
+        }
+        .btn {
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            padding: 9px;
+        }
+        .btn:hover {
+            cursor: pointer;
+        }
+        .divMatrizes {
+            justify-content: center;
+            display: flex;
+            align-items:center
+        }
+        section.erros > div {
+            display: flex;
+            padding: 10px 30px;
+            justify-content: space-evenly;
+        }
+        section.erros div div {
+            padding: 30px;
+            padding-top: 0px;
+        }
+        section.erros th {
+            padding: 5px 10px;
+        }
+        table caption {
+            font-weight: bolder;
+            font-size: 14px;
+            padding: 5px;
+            border-top: 4px double black;
+            border-bottom: 4px double black;
+        }
+        section.consumos div {
+            display: flex;
+            justify-content: center;
+        }
+        section.consumos table th {
+            padding: 0px 14px;
+        }
+        .green {
+            background-color: green;
+            color: white;
+        }
+        .wine {
+            color: white;
+            background-color: rgb(100, 1, 21);
+        }
+    </style>
+
+    <py-env>
+        - numpy
+        - tabulate
+        - paths:
+          - /especiais/matrizes.py
+          - /especiais/erros.py
+          - /especiais/matrizes_exemplos.py
+          - /especiais/normas.py
+          - /especiais/normasMatriciais.py
+          - /especiais/householder.py
+          - /qr_gsclassico.py
+          - /qr_gsmodificado.py
+          - /qr_hh.py
+    </py-env> 
+</head>
+<body class="container">
+    <h1>Fatoração QR via Gram-Schmidt e Householder</h1>
+    <p>Qual é o tamanho da matriz?</p>
+    <div class="dimensoes">
+        <input type="number" placeholder="tamanho" type="text" id="tamanho_matriz" value="3">
+        <br><br>
+        <button class="btn purple" id="rodar">Montar matriz</button>
+    </div>
+    <button class="btn green" id="rodar_quadradoMagico">Quadrado Mágico</button>
+    <button class="btn wine" id="rodar_hilbert">Hilbert</button>
+    
+    <!-- INPUTS -->
+    <div class="div_tabela">
+        <table id="tabela_matriz">
+        </table>
+    </div>
+    <button class="btn purple" id="calcular">Calcular</button>
+
+    <!-- SEÇÃO COM OS RESULTADOS -->
+    <section id="resultados"></section>
+    <section class="erros">
+        <h2>Margens de Erro</h2>
+        <div>
+            <div>
+                <table id="tabela_AQR">
+                    <caption>|| A - QR ||</caption>
+                    <tr>
+                        <th>Norma</th>
+                        <th>Gram-Schmidt Clássico</th>
+                        <th>Gram-Schmidt Modificado</th>
+                        <th>Reflexões de Householder</th>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table id="tabela_QtQ">
+                    <caption>|| I - QtQ ||</caption>
+                    <tr>
+                        <th>Norma</th>
+                        <th>Gram-Schmidt Clássico</th>
+                        <th>Gram-Schmidt Modificado</th>
+                        <th>Reflexões de Householder</th>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="consumos">
+        <h2>Análise de Tempo Demandado</h2>
+        <div>
+            <table id="tabela_consumo">
+                <caption>Consumos</caption>
+                <tr>
+                    <th>Método</th>
+                    <th>Tempo Gasto</th>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    
+
+    <py-script src="main.py"></py-script>
+    
+    <script type="text/javascript">
+
+        // função que retorna os valores
+        function valores(){
+            // instancia a lista de linhas
+            let matriz = []
+            // captura as trs
+            let trs = document.getElementById("tabela_matriz").children;
+            // percorre
+            for(let i = 0; i < trs.length; i++){
+                // instancia a lista de colunas
+                let cols = []
+                // lista de tds
+                let tds = trs[i].children;
+                // percorre
+                for(let j = 0; j < tds.length; j++){
+                    // o input vai ser o 1º e único filho
+                    let valor = tds[j].firstChild.value;
+                    cols.push(valor)
+                }
+                matriz.push(cols)
+            }   
+            console.log(matriz)
+            return matriz 
+        }
+
+        // função para criar tabelas como matrizes, só pra facilitar
+        function tabela(idTabela, matriz, arredondar=3){
+            // cria uma div que vai ter a classe div_tabela
+            let div = document.createElement("div")
+            div.classList.add('div_tabela')
+            // cria uma tabela
+            let tabela = document.createElement("table")
+            tabela.id = idTabela
+            // percorre as linhas da matriz
+            for(let i = 0; i < matriz.length; i++){
+                // cria um tr para a linha
+                let tr = document.createElement("tr")
+                // percorre as colunas da linha da matriz
+                for(let j = 0; j < matriz[i].length; j++){
+                    // cria um td para a coluna
+                    let td = document.createElement("td")
+                    // seta o valor
+                    td.innerText = `${Math.round(matriz[i][j]*Math.pow(10, arredondar))/Math.pow(10, arredondar)}`
+                    // adiciona o td ao tr
+                    tr.appendChild(td)
+                }
+                // adiciona o tr à table
+                tabela.appendChild(tr)
+            }
+            // adiciona a tabela à div
+            div.appendChild(tabela)
+            // retorna a div
+            return div
+        }
+
+        // FUNÇÃO PARA EXIBIR OS RESULTADOS
+        function exibirResultados(dict_info){
+            // SEÇÃO GERAL
+            let secao = document.getElementById("resultados")
+                
+            // PERCORRE OS RESULTADOS
+            for (let [metodo, obj] of dict_info){
+                // CRIA UM H3 PARA O TÍTULO
+                let h3 = document.createElement("h3")
+                h3.innerText = metodo
+                secao.appendChild(h3)
+                
+                // TEREMOS UMA DIV COM 3 MATRIZES: A = QR
+                let divMatrizes = document.createElement("div")
+                divMatrizes.classList.add("divMatrizes")
+                // CRIA UMA DIV PARA CADA UMA
+                let divA = tabela(`${metodo}_A`, obj.get("matriz"))
+                let divQ = tabela(`${metodo}_Q`, obj.get("Q"))
+                let divR = tabela(`${metodo}_R`, obj.get("R"))
+
+                // adiciona
+                divMatrizes.appendChild(divA)
+                divMatrizes.innerHTML += ' = '
+                divMatrizes.appendChild(divQ)
+                divMatrizes.innerHTML += ' * '
+                divMatrizes.appendChild(divR)
+
+                // adiciona a div_matriz à secao
+                secao.appendChild(divMatrizes)
+            }
+            
+            /* ------------------------------------------------------ */
+
+            // PARA TRATAR DOS ERROS, É PRECISO PERCORRER AS NORMAS
+
+            // captura a tabela AQR
+            let tabela_AQR = document.getElementById("tabela_AQR")
+
+            for (let [norma,val] of dict_info.get("Gram-Schmidt Clássico").get("margem QR")){
+                // cria um tr para a norma
+                var tr = document.createElement("tr")
+                tr.id = "qr_"+norma
+                
+                // verifica se já existe
+                if(document.getElementById("qr_"+norma)){
+                    tr = document.getElementById("qr_"+norma)
+                    tr.innerHTML = ""
+                }
+
+                // td para o nome da norma
+                let td = document.createElement("td")
+                td.innerText = norma
+                tr.appendChild(td)
+
+                // percorre os métodos
+                for (let [metodo, obj] of dict_info){
+                    // td para o valor do método
+                    let td = document.createElement("td")
+                    // o valor que aparecerá será de "margem QR"
+                    td.innerText = obj.get("margem QR").get(norma)
+                    // adiciona à tr
+                    tr.appendChild(td)
+                }
+                // adiciona o tr à tabela
+                tabela_AQR.appendChild(tr)
+            }
+
+            // captura a tabela QtQ
+            let tabela_QtQ = document.getElementById("tabela_QtQ")
+
+            for (let [norma, val] of dict_info.get("Gram-Schmidt Clássico").get("margem QR")){
+                // cria um tr para a norma
+                var tr = document.createElement("tr")
+                tr.id = "qtq_" + norma
+                // verifica se já existe
+                if(document.getElementById("qtq_"+norma)){
+                    tr = document.getElementById("qtq_"+norma)
+                    tr.innerHTML = ""}
+
+                // td para o nome da norma
+                let td = document.createElement("td")
+                td.innerText = norma
+                tr.appendChild(td)
+
+                // percorre os métodos
+                for (let [metodo, obj] of dict_info){
+                    // td para o valor do método
+                    let td = document.createElement("td")
+                    // o valor que aparecerá será de "margem QtQ"
+                    // se o valor for maior que 1, arredonda com 4 casas
+                    let valor = obj.get("margem QtQ").get(norma)
+                    if(valor > 1){
+                        valor = Math.round(valor*Math.pow(10,4))/Math.pow(10,4)
+                    }
+                    td.innerText = valor
+                    // adiciona à tr
+                    tr.appendChild(td)
+                }
+                // adiciona o tr à tabela
+                tabela_QtQ.appendChild(tr)
+            }                
+        
+            /* ------------------------------------------------------ */ 
+            
+            // PARA TRATAR DO CONSUMO, É PRECISO PERCORRER NOVAMENTE OS MÉTODOS
+
+            // tabela de consumo
+            let tabela_consumo = document.getElementById("tabela_consumo")
+            // percorre os métodos
+            for (let [metodo, obj] of dict_info){
+                // cada método tem uma tr
+                var tr = document.createElement("tr")
+                tr.id = "consumo_" + metodo
+
+                // verifica se já existe
+                if(document.getElementById("consumo_" + metodo)){
+                    tr = document.getElementById("consumo_" + metodo)
+                    tr.innerHTML = ""
+                }
+                
+                // uma td será para o nome do método
+                var td = document.createElement("td")
+                td.innerText = metodo
+                tr.appendChild(td)
+
+                // a segunda será para o tempo gasto
+                var td = document.createElement("td")
+                td.innerText = Math.round(obj.get('tempo')*Math.pow(10,5))/Math.pow(10,5)
+                tr.appendChild(td)
+
+                // adiciona a tr à tabela
+                tabela_consumo.appendChild(tr)
+            }
+        }
+    </script>
+    <script src="src/main.js" type="module"></script>
+</body>
+</html>
