@@ -208,7 +208,7 @@ function exibirResultados(dict_info){
     margens("tabela_AQR", "margem QR", dict_info)
 
     // margens de erro para I - QtQ
-    margens("tabela_QtQ", "margem QR", dict_info)
+    margens("tabela_QtQ", "margem QtQ", dict_info)
 
     // consumo (tempo apenas, por enquanto)
     tabelaConsumo(dict_info)    
