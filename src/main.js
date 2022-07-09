@@ -138,14 +138,14 @@ function margens(idTabela, campo, dict_info){
 
     for (let [norma, val] of dict_info.get("Gram-Schmidt Clássico").get(campo)){
         // caso já exista, só copia
-        if(document.getElementById("qr_"+norma)){
-            tr = document.getElementById("qr_"+norma)
+        if(document.getElementById(campo+norma)){
+            tr = document.getElementById(campo+norma)
             tr.innerHTML = ""
         }
         // senão, cria um tr para a norma
         else{
             var tr = document.createElement("tr")
-            tr.id = "qr_"+norma
+            tr.id = campo+norma
         }
         
         // td para o nome da norma
@@ -165,7 +165,7 @@ function margens(idTabela, campo, dict_info){
             tr.appendChild(td)
         }
         // adiciona o tr à tabela
-        tabela_AQR.appendChild(tr)
+        tabela.appendChild(tr)
     }
 }
 
