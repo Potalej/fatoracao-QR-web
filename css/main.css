@@ -1,0 +1,110 @@
+/*------------- GERAL -------------*/
+body {
+    text-align: center;
+    font-family: Verdana, Geneva, Tahoma, sans-serif !important;
+    font-size: 12px;
+    padding: 30px 80px;
+}
+h1 {
+    font-size: 25px !important;
+}
+input {
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+}
+.purple {
+    background-color: rgb(172, 44, 172);
+    color: white;
+}
+.btn {
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    padding: 9px;
+}
+.btn:hover {
+    cursor: pointer;
+}
+.green {
+    background-color: green;
+    color: white;
+}
+.wine {
+    color: white;
+    background-color: rgb(100, 1, 21);
+}
+table caption {
+    font-weight: bolder;
+    font-size: 14px;
+    padding: 5px;
+    border-top: 4px double black;
+    border-bottom: 4px double black;
+}
+/*---------- FIM DE GERAL ----------*/
+
+/*-------- MATRIZ (INPUTS) ---------*/
+input.elemento_ij {
+    width: 30px !important;
+}
+/* desabilita as rodinhas do input */
+input.elemento_ij::-webkit-outer-spin-button,
+input.elemento_ij::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* CONFIGURAÇÕES DA MATRIZ DE FATO */
+.div_tabela {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px !important;
+}
+.div_tabela > table {
+    padding: 5px;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    border-top: none;
+    border-bottom: none;
+}
+.div_tabela > table td {
+    padding: 10px;
+    height: 15px;
+    width: 15px;
+}
+/*----- FIM DE MATRIZ (INPUTS) -----*/
+
+/*--- DIV ONDE FICAM AS MATRIZES ---*/
+.divMatrizes {
+    justify-content: center;
+    display: flex;
+    align-items:center
+}
+/*--- DIV ONDE FICAM AS MATRIZES ---*/
+
+/*------ SEÇÃO DE ERROS E TAL ------*/
+section.erros > div {
+    display: flex;
+    padding: 10px 30px;
+    justify-content: space-evenly;
+}
+section.erros div div {
+    padding: 30px;
+    padding-top: 0px;
+}
+section.erros th {
+    padding: 5px 10px;
+}
+/*------ SEÇÃO DE ERROS E TAL ------*/
+
+/*------- SEÇÃO DE CONSUMOS --------*/
+section.consumos div {
+    display: flex;
+    justify-content: center;
+}
+section.consumos table th {
+    padding: 0px 14px;
+}
+/*------- SEÇÃO DE CONSUMOS --------*/
