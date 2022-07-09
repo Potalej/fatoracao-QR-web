@@ -29,6 +29,8 @@ def calculos(matriz):
         nome: {
             "função": funcoes[nome],
             "matriz": M.lista(),
+            "margem QtQ": {},
+            "margem QR": {}
         } for nome in funcoes
     }
     # lista de normas
