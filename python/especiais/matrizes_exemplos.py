@@ -1,4 +1,4 @@
-from auxiliares.matrizes import MatrizDict
+from matrizes import MatrizDict
 import numpy as np
 
 def hilbert(n:int):
