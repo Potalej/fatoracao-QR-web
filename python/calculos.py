@@ -21,7 +21,7 @@ def calculos(matriz):
     # funções e nomes
     funcoes = {
         "Gram-Schmidt Clássico": GSClassico,
-        "Gram-Schdmit Modificado": GSModificado,
+        "Gram-Schmidt Modificado": GSModificado,
         "Reflexões de Householder": QR_Householder
     }
     # em um dict ficará armazenado todas as informações necessárias
