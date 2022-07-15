@@ -1,4 +1,4 @@
-from matrizes import MatrizDict
+from auxiliares.matrizes import MatrizDict
 import numpy as np
 
 def hilbert(n:int):
@@ -22,7 +22,7 @@ def hilbert(n:int):
 def magica(n):
   n = int(n)
   if n < 3:
-    raise ValueError("Size must be at least 3")
+    raise ValueError("O tamanho mínimo é 3.")
   if n % 2 == 1:
     p = np.arange(1, n+1)
     return MatrizDict((n*np.mod(p[:, None] + p - (n+3)//2, n) + np.mod(p[:, None] + 2*p-2, n) + 1).tolist())
@@ -33,7 +33,7 @@ def magica(n):
     M[K] = n*n + 1 - M[K]
   else:
     p = n//2
-    M = magica(p)
+    M = np.matrix(magica(p).lista())
     M = np.block([[M, M+2*p*p], [M+3*p*p, M+p*p]])
     i = np.arange(p)
     k = (n-2)//4
